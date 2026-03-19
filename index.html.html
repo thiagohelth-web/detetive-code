@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DETETIVE CODE - Caso 01</title>
+    <style>
+        :root {
+            --primary: #00ff41; 
+            --bg: #050505;
+            --card: #121212;
+            --text: #e0e0e0;
+        }
+        body { background: var(--bg); color: var(--text); font-family: sans-serif; display: flex; justify-content: center; padding: 20px; }
+        #game-container { width: 100%; max-width: 600px; background: var(--card); border: 1px solid #333; border-radius: 12px; padding: 25px; }
+        .header { text-align: center; border-bottom: 2px solid var(--primary); padding-bottom: 15px; margin-bottom: 25px; }
+        .progress-container { height: 8px; background: #222; border-radius: 4px; margin: 15px 0; overflow: hidden; }
+        #progress-bar { height: 100%; background: var(--primary); width: 0%; transition: 0.4s; }
+        .story-box { background: #1a1a1a; padding: 15px; border-left: 4px solid var(--primary); font-style: italic; margin-bottom: 20px; }
+        .question { font-size: 1.1rem; margin-bottom: 20px; color: #fff; font-weight: bold; }
+        .options { display: grid; gap: 10px; }
+        .option-btn { background: #222; border: 1px solid #444; color: #ddd; padding: 15px; border-radius: 8px; text-align: left; cursor: pointer; }
+        .option-btn:hover { border-color: var(--primary); background: #1a2a1a; }
+        .feedback { margin-top: 20px; padding: 15px; border-radius: 8px; display: none; font-weight: bold; }
+        .btn-next { display: none; margin-top: 20px; width: 100%; background: var(--primary); color: #000; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
+        .start-btn { background: var(--primary); color: #000; border: none; padding: 15px 30px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <div id="intro-screen">
+        <h1 style="color: var(--primary); text-align: center;">DETETIVE CODE</h1>
+        <div class="story-box">
+            "Detetive, aqui é o Delegado Sabiá. Estamos diante do maior túnel já escavado neste estado. Precisamos de perícia técnica impecável. Siga os passos, colete os vestígios e não comprometa a cadeia de custódia. O Caso 01 começa agora."
+        </div>
+        <center><button class="start-btn" onclick="startGame()">INICIAR INVESTIGAÇÃO</button></center>
+    </div>
+
+    <div id="quiz-screen" class="hidden">
+        <div class="header">
+            <div style="display: flex; justify-content: space-between; color: var(--primary); font-size: 0.8rem;">
+                <span id="step-label">PASSO 1/100</span>
+                <span>DELEGADO SABIÁ NO COMANDO</span>
+            </div>
+            <div class="progress-container"><div id="progress-bar"></div></div>
+        </div>
+        <div class="question" id="question-text"></div>
+        <div class="options" id="options-container"></div>
+        <div id="feedback-box" class="feedback"></div>
+        <button id="next-btn" class="btn-next" onclick="nextStep()">PRÓXIMO PASSO</button>
+    </div>
+</div>
+
+<script>
+    // Banco de dados simplificado para teste (Substitua as strings pelas suas 100 perguntas)
+    const database = [
+        { q: "PASSO 01: Você encontrou pó branco (gesso) na entrada. Qual a conduta?", opts: ["Isolar e fotografar com escala", "Entrar correndo", "Limpar tudo"], corr: 0, rat: "Preservação é a base da perícia." },
+        { q: "PASSO 02: Vigas com giz azul foram achadas. Importância?", opts: ["Identificar Modus Operandi", "Apenas estética", "Nenhuma"], corr: 0, rat: "Materiais específicos ligam a quadrilha ao crime." },
+        // ... O sistema aceita até 100 aqui
+        { q: "PASSO 100: Caso Concluído. Documento final?", opts: ["Laudo Pericial", "Relatório de lanche", "E-mail informal"], corr: 0, rat: "O Laudo materializa a prova judicial." }
+    ];
+
+    let current = 0;
+
+    function startGame() {
+        document.getElementById('intro-screen').classList.add('hidden');
+        document.getElementById('quiz-screen').classList.remove('hidden');
+        loadStep();
+    }
+
+    function loadStep() {
+        const data = database[current];
+        document.getElementById('question-text').innerText = data.q;
+        document.getElementById('step-label').innerText = `PASSO ${current + 1}/100`;
+        document.getElementById('progress-bar').style.width = (current + 1) + "%";
+        
+        const container = document.getElementById('options-container');
+        container.innerHTML = '';
+        data.opts.forEach((opt, i) => {
+            const b = document.createElement('button');
+            b.className = 'option-btn';
+            b.innerText = opt;
+            b.onclick = () => {
+                const fb = document.getElementById('feedback-box');
+                fb.style.display = 'block';
+                if(i === data.corr) {
+                    fb.style.background = 'rgba(0,255,65,0.1)';
+                    fb.style.color = '#00ff41';
+                    fb.innerHTML = "✅ " + data.rat;
+                    document.getElementById('next-btn').style.display = 'block';
+                } else {
+                    fb.style.background = 'rgba(255,0,0,0.1)';
+                    fb.style.color = '#ff4b4b';
+                    fb.innerHTML = "❌ Erro técnico. Reavalie a cena.";
+                }
+            };
+            container.appendChild(b);
+        });
+        document.getElementById('feedback-box').style.display = 'none';
+        document.getElementById('next-btn').style.display = 'none';
+    }
+
+    function nextStep() {
+        current++;
+        if(current < database.length) loadStep();
+        else alert("PARABÉNS! VOCÊ CONCLUIU OS 100 PASSOS!");
+    }
+</script>
+</body>
+</html>
