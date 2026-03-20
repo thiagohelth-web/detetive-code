@@ -3,174 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DETETIVE CODE - 50 FASES</title>
+    <title>DETETIVE CODE - A OPERAÇÃO DO SÉCULO</title>
     <style>
-        :root { --primary: #00ff41; --bg: #0a0a0a; --card: #151515; --text: #e0e0e0; --accent: #008f11; }
-        body { background-color: var(--bg); color: var(--text); font-family: 'Courier New', Courier, monospace; margin: 0; display: flex; justify-content: center; padding: 20px; }
-        #app-container { width: 100%; max-width: 600px; background: var(--card); border: 1px solid #333; border-radius: 15px; padding: 25px; box-shadow: 0 20px 50px rgba(0,0,0,0.9); }
-        .header { text-align: center; border-bottom: 2px solid var(--primary); margin-bottom: 20px; padding-bottom: 10px; }
-        .status-bar { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--primary); margin-bottom: 10px; }
-        .progress-bg { width: 100%; height: 8px; background: #222; border-radius: 10px; margin-bottom: 20px; }
-        #progress-fill { height: 100%; background: var(--primary); width: 0%; transition: 0.4s; box-shadow: 0 0 10px var(--primary); }
-        .question-box { font-size: 1.1rem; line-height: 1.4; margin-bottom: 20px; min-height: 80px; }
+        :root { --primary: #00ff41; --bg: #0a0a0a; --card: #151515; --text: #e0e0e0; --error: #ff3e3e; }
+        body { background-color: var(--bg); color: var(--text); font-family: 'Courier New', Courier, monospace; margin: 0; display: flex; justify-content: center; padding: 10px; }
+        #app-container { width: 100%; max-width: 600px; background: var(--card); border: 2px solid #333; border-radius: 10px; padding: 20px; box-shadow: 0 0 30px rgba(0,255,65,0.2); }
+        .header { text-align: center; border-bottom: 2px solid var(--primary); margin-bottom: 15px; padding-bottom: 10px; color: var(--primary); }
+        .progress-bg { width: 100%; height: 10px; background: #222; border-radius: 5px; margin-bottom: 20px; border: 1px solid #444; }
+        #progress-fill { height: 100%; background: var(--primary); width: 0%; transition: 0.5s; }
+        .narrative-box { background: rgba(0,0,0,0.6); padding: 15px; border-left: 5px solid var(--primary); margin-bottom: 15px; font-size: 1rem; line-height: 1.4; color: #fff; }
         .options-grid { display: grid; gap: 10px; }
-        .opt-btn { background: #1a1a1a; color: #fff; border: 1px solid #444; padding: 15px; border-radius: 8px; cursor: pointer; text-align: left; font-size: 0.95rem; transition: 0.3s; }
-        .opt-btn:hover { border-color: var(--primary); background: #222; }
-        #feedback { margin-top: 15px; padding: 15px; border-radius: 8px; display: none; font-size: 0.9rem; border: 1px solid; }
-        .next-btn { width: 100%; background: var(--primary); color: #000; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 15px; display: none; font-size: 1rem; }
-        .start-btn { width: 100%; background: var(--primary); color: #000; padding: 20px; border-radius: 10px; font-weight: bold; cursor: pointer; border: none; font-size: 1.2rem; }
+        .opt-btn { background: #1a1a1a; color: #fff; border: 1px solid var(--primary); padding: 15px; border-radius: 5px; cursor: pointer; text-align: left; font-size: 0.95rem; }
+        .opt-btn:hover { background: var(--primary); color: #000; font-weight: bold; }
+        #feedback { margin-top: 15px; padding: 15px; border-radius: 5px; display: none; text-align: center; font-weight: bold; }
+        .next-btn { width: 100%; background: #fff; color: #000; border: none; padding: 18px; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 15px; display: none; }
+        .start-btn { width: 100%; background: var(--primary); color: #000; padding: 20px; border-radius: 5px; font-weight: bold; cursor: pointer; border: none; font-size: 1.2rem; }
         .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
 <div id="app-container">
-    <div id="intro-screen">
+    <div id="intro">
         <div class="header"><h1>DETETIVE CODE</h1></div>
-        <p style="text-align: center; color: var(--primary);">INVESTIGAÇÃO: OPERAÇÃO TÚNEL</p>
-        <div style="background: #111; padding: 15px; border-left: 4px solid var(--primary); margin: 20px 0;">
-            "Detetive, o Delegado Sabiá autorizou sua entrada. São 50 etapas críticas de perícia e segurança. Um erro pode comprometer a prova ou sua vida. Prossiga com cautela."
+        <div class="narrative-box">
+            "Detetives, aqui é o Delegado Sabiá. O maior assalto a banco da história está acontecendo sob nossos pés. O túnel foi localizado. Temos 100 passos até o confronto final. Vocês estão prontos para caçar esses bandidos?"
         </div>
-        <button class="start-btn" onclick="startGame()">INICIAR PERÍCIA</button>
+        <button class="start-btn" onclick="start()">INICIAR INVESTIGAÇÃO</button>
     </div>
 
-    <div id="game-screen" class="hidden">
-        <div class="status-bar">
-            <span id="label-step">PASSO: 1/50</span>
-            <span id="label-score">AGENTE: ATIVO</span>
+    <div id="game" class="hidden">
+        <div style="display: flex; justify-content: space-between; color: var(--primary); font-size: 0.8rem; margin-bottom: 5px;">
+            <span id="step-count">PASSO: 1/50</span>
+            <span>STATUS: EM OPERAÇÃO</span>
         </div>
         <div class="progress-bg"><div id="progress-fill"></div></div>
-        <div class="question-box" id="question"></div>
-        <div class="options-grid" id="options"></div>
+        <div id="narrative" class="narrative-box"></div>
+        <div id="question" style="margin-bottom: 15px; font-weight: bold; color: var(--primary);"></div>
+        <div id="options" class="options-grid"></div>
         <div id="feedback"></div>
-        <button id="next-button" class="next-btn" onclick="nextQuestion()">PRÓXIMO PASSO ➔</button>
+        <button id="next-button" class="next-btn" onclick="next()">AVANÇAR NA HISTÓRIA ➔</button>
     </div>
 </div>
 
 <script>
     const db = [
-        // SETOR 1: ENTRADA E LOGÍSTICA (1-10)
-        { q: "PASSO 01: Entrada da Loja de Carpetes. Odor forte de mofo. Qual o EPI respiratório?", options: ["Máscara PFF2/N95", "Máscara de pano", "Nenhuma"], correct: 0, rat: "Correto! Ambientes fechados exigem proteção contra esporos e poeira." },
-        { q: "PASSO 02: Há fios elétricos expostos em poças. Qual o risco principal?", options: ["Risco Elétrico (Choque)", "Risco Biológico", "Risco Ergonômico"], correct: 0, rat: "Cuidado! A umidade potencializa a condução elétrica." },
-        { q: "PASSO 03: Você encontra um rádio transmissor. Como preservá-lo?", options: ["Saco antiestático sem desligar", "Desligar e colocar no bolso", "Deixar onde está"], correct: 0, rat: "Exato! Preserva a memória volátil do aparelho." },
-        { q: "PASSO 04: Mancha de fluido no chão. Qual técnica de coleta?", options: ["Swab esterilizado", "Papel toalha comum", "Raspar com faca"], correct: 0, rat: "O Swab evita a contaminação da amostra biológica." },
-        { q: "PASSO 05: Prateleiras bloqueando a visão. Como movê-las com segurança?", options: ["Postura ereta e força nas pernas", "Curvar a coluna", "Puxar de uma vez"], correct: 0, rat: "Ergonomia! Proteja sua lombar ao movimentar cargas." },
-        { q: "PASSO 06: Localizada planta do bairro. É que tipo de prova?", options: ["Vestígio Documental", "Vestígio Biológico", "Vestígio Químico"], correct: 0, rat: "Documentos ajudam a provar o planejamento do crime." },
-        { q: "PASSO 07: O piso parece oco. O que isso indica?", options: ["Possível entrada do túnel", "Defeito de construção", "Lugar para guardar lixo"], correct: 0, rat: "A acústica é uma ferramenta de busca do perito." },
-        { q: "PASSO 08: Encontrado copo com digital. Qual pó usar em superfície clara?", options: ["Pó preto", "Pó branco", "Pó cinza"], correct: 0, rat: "O contraste é fundamental para a revelação da digital." },
-        { q: "PASSO 09: Escada improvisada para o subsolo. Qual a norma de segurança?", options: ["NR-35 (Trabalho em Altura)", "NR-12", "NR-5"], correct: 0, rat: "Qualquer descida acima de 2 metros exige cuidados da NR-35." },
-        { q: "PASSO 10: O Delegado pede pressa. O que o perito faz?", options: ["Mantém o rigor técnico", "Acelera e pula etapas", "Deixa o Delegado fazer"], correct: 0, rat: "A qualidade da prova depende da calma e técnica." },
-
-        // SETOR 2: DENTRO DO TÚNEL (11-20)
-        { q: "PASSO 11: O túnel é estreito e quente. Qual o risco?", options: ["Espaço Confinado (NR-33)", "Risco Químico", "Risco de Queda"], correct: 0, rat: "Espaços confinados podem ter deficiência de oxigênio." },
-        { q: "PASSO 12: Há sacos de terra empilhados. Por que analisar a terra?", options: ["Geologia Forense (Origem)", "Ver se tem joias", "Limpeza do local"], correct: 0, rat: "A composição do solo liga o túnel ao descarte da terra." },
-        { q: "PASSO 13: Iluminação feita com gambiarras. Qual o perigo?", options: ["Incêndio e Explosão", "Luz fraca apenas", "Estética"], correct: 0, rat: "Fios expostos em locais com poeira são combustíveis." },
-        { q: "PASSO 14: Encontrada marmita restos de comida. Importância?", options: ["DNA dos suspeitos", "Saber o que comeram", "Lixo sem valor"], correct: 0, rat: "Saliva em talheres e restos é fonte rica de DNA." },
-        { q: "PASSO 15: O teto do túnel range. Qual a conduta?", options: ["Evacuar e solicitar escoramento", "Continuar rápido", "Gritar"], correct: 0, rat: "Risco de desabamento é iminente. Segurança primeiro!" },
-        { q: "PASSO 16: Uso de lanternas UV. O que elas revelam?", options: ["Fluidos biológicos e fibras", "Apenas poeira", "Nada"], correct: 0, rat: "A luz ultravioleta faz fluidos orgânicos brilharem." },
-        { q: "PASSO 17: Marcas de picareta na parede. O que analisar?", options: ["Padrão de ferramentas", "Cor da parede", "Dureza da pedra"], correct: 0, rat: "Marcas de ferramentas funcionam como 'digitais' mecânicas." },
-        { q: "PASSO 18: Ventilador ligado no fundo. Qual a função?", options: ["Renovação de ar", "Esfriar as máquinas", "Espantar mosquitos"], correct: 0, rat: "Essencial para evitar acúmulo de CO2 em túneis." },
-        { q: "PASSO 19: Bituca de cigarro encontrada. Como coletar?", options: ["Pinça esterilizada em papel", "Mão nua", "Saco plástico úmido"], correct: 0, rat: "Pinças evitam contaminar o DNA de quem fumou." },
-        { q: "PASSO 20: Você sente tontura no túnel. O que faz?", options: ["Sai imediatamente (falta oxigênio)", "Senta e descansa lá", "Bebe água"], correct: 0, rat: "Tontura em túnel é sinal de gás tóxico ou falta de O2." },
-
-        // SETOR 3: ENGENHARIA DO CRIME (21-30)
-        { q: "PASSO 21: Encontrado macaco hidráulico industrial. Função?", options: ["Romper concreto do cofre", "Trocar pneu", "Apoio de braço"], correct: 0, rat: "Ferramentas pesadas indicam o poder da quadrilha." },
-        { q: "PASSO 22: O túnel tem 100 metros. Qual o erro de medição fatal?", options: ["Não usar trena laser/fita", "Usar passos", "Medir por cima"], correct: 1, rat: "Passos não servem como medida judicial." },
-        { q: "PASSO 23: Luvas de látex usadas jogadas. Por que periciar?", options: ["DNA epitelial (suor interno)", "Ver o tamanho da mão", "Ver a marca"], correct: 0, rat: "O suor dentro da luva é excelente para extrair DNA." },
-        { q: "PASSO 24: Garrafas de água com nomes. O que indica?", options: ["Divisão de tarefas/grupos", "Sede", "Higiene"], correct: 0, rat: "Ajuda a traçar o perfil e quantidade de criminosos." },
-        { q: "PASSO 25: Escoramento de madeira úmido. Risco?", options: ["Proliferação de fungos e queda", "Nenhum", "Cheiro ruim"], correct: 0, rat: "Madeira úmida apodrece e perde a sustentação." },
-        { q: "PASSO 26: Ruído de moedas caindo. Estamos perto de onde?", options: ["Cofre/Tesouraria", "Saída", "Banheiro"], correct: 0, rat: "A percepção auditiva guia a fase final da perícia." },
-        { q: "PASSO 27: Odor de queimado metálico. Indica o que?", options: ["Uso recente de maçarico", "Cigarro", "Comida"], correct: 0, rat: "O corte de metal deixa um cheiro químico característico." },
-        { q: "PASSO 28: Roupa suja deixada para trás. Como embalar?", options: ["Saco de papel (deixa respirar)", "Saco plástico lacrado", "Bolso"], correct: 0, rat: "Roupas úmidas em plástico emboloram e destroem o DNA." },
-        { q: "PASSO 29: O chão treme com o tráfego da rua. Risco?", options: ["Desmoronamento por vibração", "Terremoto", "Nenhum"], correct: 0, rat: "Vibrações externas são perigosas para túneis artesanais." },
-        { q: "PASSO 30: Câmera de segurança desviada. O que fazer?", options: ["Fotografar o ângulo e coletar", "Voltar para o lugar", "Desligar"], correct: 0, rat: "O ângulo da câmera indica os 'pontos cegos' usados." },
-
-        // SETOR 4: DENTRO DO BANCO (31-40)
-        { q: "PASSO 31: Entrada no cofre pelo chão. Qual o cuidado?", options: ["Cortes em vergalhões de aço", "Sujeira", "Luz forte"], correct: 0, rat: "O aço cortado cria pontas perfurantes perigosas." },
-        { q: "PASSO 32: Muitas notas de dinheiro espalhadas. Conduta?", options: ["Preservar e contar com testemunhas", "Pegar uma amostra", "Ignorar"], correct: 0, rat: "Vestígios financeiros exigem custódia rigorosa." },
-        { q: "PASSO 33: Pó branco fino sobre as notas. O que pode ser?", options: ["Extintor ou Pó de Dril", "Farinha", "Açúcar"], correct: 0, rat: "Criminosos usam pó de extintor para apagar digitais." },
-        { q: "PASSO 34: Perito sente cansaço extremo. Fator?", options: ["Risco Ergonômico/Psicológico", "Preguiça", "Fome"], correct: 0, rat: "O estresse e o esforço físico em perícia são riscos ocupacionais." },
-        { q: "PASSO 35: Máscara de solda profissional encontrada. Risco?", options: ["Radiação não ionizante (solda)", "Corte", "Impacto"], correct: 0, rat: "A solda gera riscos oculares graves sem proteção." },
-        { q: "PASSO 36: Cofre violado com oxicorte. O que coletar?", options: ["Resíduos de fuligem e gases", "Pedaços de papel", "Nada"], correct: 0, rat: "A química da queima identifica o tipo de gás usado." },
-        { q: "PASSO 37: Marcas de sapatos no pó. Procedimento?", options: ["Fotografia pericial e molde", "Limpar para não sujar", "Pisar em cima"], correct: 0, rat: "A pegada revela a marca, tamanho e desgaste do calçado." },
-        { q: "PASSO 38: Computador do banco ligado. Conduta?", options: ["Perito de informática assume", "Desligar na tomada", "Mexer no mouse"], correct: 0, rat: "Dados em memória RAM somem se desligar incorretamente." },
-        { q: "PASSO 39: Porta do cofre travada por dentro. Como agir?", options: ["Não forçar, aguardar chaveiro", "Explodir", "Bater"], correct: 0, rat: "Forçar pode destruir mecanismos internos de prova." },
-        { q: "PASSO 40: Encontrado bloqueador de sinal (Jumper). Função?", options: ["Anular alarmes e celulares", "Melhorar o Wi-Fi", "Ouvir música"], correct: 0, rat: "Tecnologia usada para isolar o banco do mundo externo." },
-
-        // SETOR 5: FINALIZAÇÃO E CUSTÓDIA (41-50)
-        { q: "PASSO 41: Registro de impressões digitais em metal. Qual método?", options: ["Cianoacrilato (Super Bonder)", "Pincel apenas", "Água"], correct: 0, rat: "Vapor de cianoacrilato é o melhor para superfícies metálicas." },
-        { q: "PASSO 42: Delegado quer levar as provas agora. Pode?", options: ["Apenas após lacre e registro", "Sim, ele manda", "Sim, para ser rápido"], correct: 0, rat: "A cadeia de custódia não aceita exceções, nem para o Delegado." },
-        { q: "PASSO 43: Como identificar cada saco de prova?", options: ["Etiqueta com data, hora e agente", "Escrever no saco com caneta", "Não precisa"], correct: 0, rat: "Rastreabilidade é tudo no processo judicial." },
-        { q: "PASSO 44: O perito deve lavar as mãos quando?", options: ["Imediatamente após retirar as luvas", "Só em casa", "Antes de comer apenas"], correct: 0, rat: "Regra básica de biossegurança hospitalar e pericial." },
-        { q: "PASSO 45: O que é o 'Croqui' da cena?", options: ["Desenho esquemático das distâncias", "Uma foto panorâmica", "A lista de suspeitos"], correct: 0, rat: "O desenho ajuda o juiz a entender a cena do crime." },
-        { q: "PASSO 46: Cabelo encontrado no túnel. O que fornece?", options: ["DNA com o bulbo capilar", "Cor do suspeito apenas", "Nada"], correct: 0, rat: "O bulbo contém o código genético completo." },
-        { q: "PASSO 47: Encontrado recibo de padaria. Importância?", options: ["Data e hora da presença no local", "Preço do pão", "Saber o que comeram"], correct: 0, rat: "Estabelece a linha do tempo (Timeline) do crime." },
-        { q: "PASSO 48: Equipamentos usados na perícia devem ser:", options: ["Higienizados e calibrados", "Guardados sujos", "Descartados sempre"], correct: 0, rat: "A manutenção evita contaminação cruzada em outros crimes." },
-        { q: "PASSO 49: O laudo final deve ser baseado em quê?", options: ["Fatos científicos e vestígios", "Opinião pessoal", "No que o Delegado acha"], correct: 0, rat: "O perito é imparcial e escravo da ciência." },
-        { q: "PASSO 50: Fim da primeira etapa! O que o perito faz?", options: ["Revisa o lacre de todos os vestígios", "Vai embora dormir", "Comemora"], correct: 0, rat: "A última conferência garante que nada se perca no transporte." }
-    ];
-
-    let current = 0;
-
-    function startGame() {
-        document.getElementById('intro-screen').classList.add('hidden');
-        document.getElementById('game-screen').classList.remove('hidden');
-        loadQuestion();
-    }
-
-    function loadQuestion() {
-        const data = db[current];
-        document.getElementById('label-step').innerText = `PASSO: ${current + 1}/${db.length}`;
-        document.getElementById('progress-fill').style.width = ((current + 1) / db.length * 100) + "%";
-        document.getElementById('question').innerText = data.q;
-        
-        const optionsDiv = document.getElementById('options');
-        optionsDiv.innerHTML = '';
-        data.options.forEach((opt, i) => {
-            const btn = document.createElement('button');
-            btn.className = 'opt-btn';
-            btn.innerText = opt;
-            btn.onclick = () => checkAnswer(i);
-            optionsDiv.appendChild(btn);
-        });
-
-        document.getElementById('feedback').style.display = 'none';
-        document.getElementById('next-button').style.display = 'none';
-    }
-
-    function checkAnswer(idx) {
-        const data = db[current];
-        const feedback = document.getElementById('feedback');
-        feedback.style.display = 'block';
-        
-        if(idx === data.correct) {
-            feedback.style.backgroundColor = 'rgba(0, 255, 65, 0.1)';
-            feedback.style.color = var(--primary);
-            feedback.style.borderColor = var(--primary);
-            feedback.innerHTML = `<strong>✅ EXCELENTE:</strong> ${data.rat}`;
-            document.getElementById('next-button').style.display = 'block';
-        } else {
-            feedback.style.backgroundColor = 'rgba(255, 0, 0, 0.1)';
-            feedback.style.color = '#ff4b4b';
-            feedback.style.borderColor = '#ff4b4b';
-            feedback.innerHTML = `<strong>❌ ERRO TÉCNICO:</strong> Procedimento incorreto. Reavalie a cena.`;
-        }
-    }
-
-    function nextQuestion() {
-        current++;
-        if(current < db.length) {
-            loadQuestion();
-        } else {
-            document.getElementById('app-container').innerHTML = `
-                <div class="header"><h1>MISSÃO CUMPRIDA!</h1></div>
-                <p style="text-align:center">Você concluiu os 50 primeiros passos da perícia do túnel.</p>
-                <p style="color:var(--primary); text-align:center"><strong>STATUS: PERITO QUALIFICADO</strong></p>
-                <button class="start-btn" onclick="location.reload()">REINICIAR SIMULADO</button>
-            `;
-        }
-    }
-</script>
-
-</body>
-</html>
+        { n: "A porta da loja de carpetes está entreaberta. O silêncio é suspeito. Vocês entram devagar.", q: "Onde vocês focam a busca?", options: ["No estoque de carpetes", "No balcão de vendas", "Atrás da cortina do escritório"], correct: 0, rat: "Achamos marcas de terra fresca nos carpetes! Eles passaram por aqui." },
+        { n: "Movendo os carpetes, vocês encontram um buraco no concreto. Um cheiro de óleo diesel sobe pelo vão.", q: "O que fazem antes de descer?", options: ["Jogam uma granada de luz", "Lançam um drone de inspeção", "Descem de uma vez"], correct: 1, rat: "O drone mostra um corredor iluminado por luzes improvisadas. Caminho livre." },
+        { n: "No túnel, vocês acham um bilhete: 'Zeca, o maçarico está no setor 4. Não demore'.", q: "Quem é Zeca?", options: ["Um funcionário do banco", "Um ladrão conhecido como Toupeira", "O dono da loja"], correct: 1, rat: "Zeca Toupeira! O maior escavador do crime organizado. O caso ficou sério." },
+        { n: "Vocês ouvem passos vindo de um corredor lateral do túnel.", q: "Como o grupo reage?", options: ["Gritam 'Parado!'", "Apagam as lanternas e se escondem", "Correm na direção do som"], correct: 1, rat: "Eles passaram do lado de vocês! Um deles deixou cair um molho de chaves." },
+        { n: "O molho de chaves tem a etiqueta 'Cofre 02'.", q: "O que isso indica?", options: ["O alvo principal é o cofre 2", "Eles já saíram do banco", "As chaves são falsas"], correct: 0, rat: "Exato! Eles já têm as chaves secundárias. Precisamos correr." },
+        { n: "Uma bifurcação no túnel. Um lado tem trilhos de carrinho, o outro tem cabos de energia.", q: "Qual seguir?", options: ["Trilhos (transporte de dinheiro)", "Cabos (energia do cofre)", "Voltar"], correct: 0, rat: "Os trilhos levam direto ao centro da operação deles." },
+        { n: "Vocês acham uma marreta suja de sangue.", q: "Qual a conduta?", options: ["Limpar para não sujar o túnel", "Embalar para exame de DNA", "Ignorar"], correct: 1, rat: "O sangue pode ser de um refém ou de um bandido ferido." },
+        { n: "Um sensor de movimento está brilhando na parede do túnel.", q: "Como passar?", options: ["Correr muito rápido", "Usar um spray congelante ou cobrir o sensor", "Chutar o sensor"], correct: 1, rat: "Boa! O alarme deles não tocou. Vocês ainda são invisíveis." },
+        { n: "Vocês encontram uma sala de descanso improvisada com restos de pizza.", q: "O que as caixas de pizza revelam?", options: ["A pizzaria onde eles pediram", "A fome deles", "Nada"], correct: 0, rat: "A Pizzaria do 'Bairro X'! O Delegado Sabiá enviou uma viatura para checar quem pediu." },
+        { n: "Um rádio comunicador no chão começa a falar: 'Sabiá na área, abortar plano B!'.", q: "Eles sabem que vocês estão aqui?", options: ["Sim, eles têm um informante", "Não, é apenas um teste", "O rádio está quebrado"], correct: 0, rat: "Temos um traidor na polícia! O grupo deve ter cuidado redobrado." },
+        // ... (Continuando a história até 50)
+        { n: "O túnel começa a ficar inundado por água do esgoto.", q: "Como prosseguir?", options: ["Usar botas de PVC e continuar", "Nadar", "Voltar"], correct: 0, rat: "A água está gelada, mas o rastro deles está fresco." },
+        { n: "Vocês acham um maçarico industrial abandonado.", q: "Por que deixariam isso?", options: ["Ficou sem gás", "Eles terminaram o furo", "Peso excessivo"], correct: 1, rat: "Se terminaram o furo, eles já estão dentro do cofre!" },
+        { n: "Uma porta de ferro bloqueia o túnel final.", q: "Como abrir?", options: ["Explodir", "Usar as chaves que encontraram", "Bater na porta"], correct: 1, rat: "As chaves do cofre 02 abriram a porta de serviço! Vocês entraram." },
+        { n: "Vocês estão no subsolo do banco. Há câmeras por todo lado.", q: "O que fazer?", options: ["Quebrar as câmeras", "Usar o Jumper de sinal (bloqueador)", "Caminhar normalmente"], correct: 1, rat: "O Jumper anulou o sinal. Vocês são fantasmas no sistema de segurança." },
+        { n: "Um segurança do banco está amarrado em uma cadeira.", q: "Qual a prioridade?", options: ["Libertar e interrogar", "Deixar ele lá e seguir", "Tirar foto"], correct: 0, rat: "Ele diz: 'Eles subiram para a tesouraria com 4 reféns!'" },
+        { n: "O elevador de carga está descendo.", q: "Como se posicionar?", options: ["Ficar na frente da porta", "Ficar nas laterais em emboscada", "Esconder no duto"], correct: 1, rat: "Emboscada perfeita! Dois bandidos saíram e foram rendidos sem disparos." },
+        { n: "O rádio de um bandido rendido toca: 'Cadê o malote, Zeca?'", q: "Como responder?", options: ["Falar com voz grossa: 'Tá subindo'", "Ficar em silêncio", "Xingar"], correct: 0, rat: "Eles acreditaram! O caminho para o andar superior está livre." },
+        { n: "Vocês chegam na sala das câmeras. O monitor mostra o líder no cofre principal.", q: "Qual o próximo passo?", options: ["Desligar a energia do banco", "Ir direto ao cofre", "Ligar o alarme de incêndio"], correct: 0, rat: "Luzes apagadas! No escuro, vocês (com visão noturna) têm a vantagem." },
+        { n: "No escuro, vocês ouvem o líder gritando com os reféns.", q: "O que o grupo faz?", options: ["Atira em tudo", "Usa granada de efeito moral (flashbang)", "Negocia"], correct: 1, rat: "BUM! Eles estão atordoados. Agora é a chance de entrar!" },
+        { n: "Fim do Setor 1: Vocês cercaram a entrada do cofre principal.", q: "O que fazer antes do passo 51?", options: ["Conferir munição e algemas", "Dormir", "Comemorar"], correct: 0, rat: "Preparação total. O cerco final começa agora!" },
+        // Adicionando mais blocos para chegar em 50 rapidamente...
+        { n: "A poeira da granada abaixou. Dois bandidos estão no chão, mas Zeca sumiu.", q: "Para onde ele foi?", options: ["Para um duto de ventilação", "Para trás dos malotes", "Fugiu pelo túnel"], correct: 0, rat: "Marcas de mãos no duto! Ele está tentando fugir pelo teto." },
+        { n: "Vocês estão no duto. É apertado e quente.", q: "Como avançar?", options: ["Um por um em silêncio", "Todos juntos fazendo barulho", "Gritar para ele se render"], correct: 0, rat: "Vocês ouvem o metal rangendo à frente. Ele está logo ali." },
+        { n: "Zeca deixou cair uma mochila cheia de diamantes.", q: "Pegar agora?", options: ["Ignorar e focar no bandido", "Parar para contar", "Guardar um pouco"], correct: 0, rat: "Foco na missão! O dinheiro não vale nada se ele escapar." },
+        { n: "O duto termina em cima da cozinha de um restaurante ao lado do banco.", q: "Como descer?", options: ["Pular de uma vez", "Olhar primeiro o ambiente", "Chamar reforços"], correct: 1, rat: "Zeca está mantendo o cozinheiro como escudo humano!" },
+        { n: "Zeca aponta uma arma para o refém.", q: "Qual a estratégia do grupo?", options: ["Atirador de elite na janela", "Conversar para distrair", "Avançar"], correct: 1, rat: "Vocês distraem ele enquanto o outro detetive se aproxima por trás." },
+        { n: "Zeca se descuida por um segundo.", q: "O que fazem?", options: ["Taser (choque)", "Atirar na perna", "Gritar"], correct: 0, rat: "ZAP! Zeca caiu. O primeiro líder foi capturado." },
+        { n: "No celular do Zeca, chega uma mensagem: 'O navio sai às 22h'.", q: "Existe um plano de fuga maior?", options: ["Sim, eles vão fugir pelo porto", "Não, é trote", "O navio é um código"], correct: 0, rat: "O Porto de Santos! A investigação agora muda de cenário." },
+        { n: "Vocês correm para o estacionamento. Há três carros suspeitos.", q: "Qual escolher para seguir a pista?", options: ["A van preta ligada", "O esportivo vermelho", "O carro de luxo blindado"], correct: 0, rat: "A van preta tem o logo da loja de carpetes! É ela." },
+        { n: "Inicia uma perseguição em alta velocidade.", q: "Como parar a van?", options: ["Atirar nos pneus", "Bater na traseira (Manobra PIT)", "Esperar o combustível acabar"], correct: 1, rat: "A van rodou e parou no acostamento! Dois suspeitos saíram correndo para a mata." },
+        { n: "Na mata, está escuro e chove muito.", q: "Como rastrear?", options: ["Seguir as pegadas na lama", "Usar cão farejador", "Esperar o sol nascer"], correct: 0, rat: "As pegadas levam a uma cabana abandonada." },
+        { n: "A cabana está protegida por um cão de guarda raivoso.", q: "Como passar?", options: ["Dar comida/carinho", "Usar um dardo tranquilizante", "Atirar no cão"], correct: 1, rat: "O cão dormiu. Vocês estão na porta da cabana." },
+        { n: "Dentro da cabana, há mapas de outros 3 bancos.", q: "O que isso revela?", options: ["É uma quadrilha em série", "Eles são geógrafos", "Nada"], correct: 0, rat: "O Delegado Sabiá arregala os olhos: 'É a maior quadrilha do país!'" },
+        { n: "Um notebook está aberto com a conta bancária do traidor da polícia.", q: "Quem é o nome na conta?", options: ["O capitão da central", "O próprio Delegado Sabiá (armação?)", "Um nome falso"], correct: 0, rat: "O Capitão?! O comando da polícia está corrompido!" },
+        { n: "O Capitão aparece na porta com uma arma. 'Vocês sabem demais'.", q: "Como reagir?", options:
