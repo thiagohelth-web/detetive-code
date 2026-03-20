@@ -7,16 +7,17 @@
     <style>
         :root { --primary: #00ff41; --bg: #0d0d0d; --card: #1a1a1a; --text: #f0f0f0; }
         body { background-color: var(--bg); color: var(--text); font-family: 'Courier New', Courier, monospace; margin: 0; display: flex; justify-content: center; padding: 20px; }
-        #app-container { width: 100%; max-width: 600px; background: var(--card); border: 2px solid var(--primary); border-radius: 10px; padding: 25px; box-shadow: 0 0 20px rgba(0,255,65,0.2); }
-        .header { text-align: center; border-bottom: 1px solid var(--primary); margin-bottom: 20px; padding-bottom: 10px; color: var(--primary); }
-        .progress-bg { width: 100%; height: 12px; background: #333; border-radius: 6px; margin-bottom: 20px; overflow: hidden; }
+        #app-container { width: 100%; max-width: 600px; background: var(--card); border: 2px solid var(--primary); border-radius: 10px; padding: 25px; box-shadow: 0 0 20px rgba(0,255,65,0.4); }
+        .header { text-align: center; border-bottom: 1px solid var(--primary); margin-bottom: 20px; padding-bottom: 10px; color: var(--primary); text-shadow: 0 0 10px var(--primary); }
+        .progress-bg { width: 100%; height: 12px; background: #333; border-radius: 6px; margin-bottom: 20px; overflow: hidden; border: 1px solid #444; }
         #progress-fill { height: 100%; background: var(--primary); width: 0%; transition: 0.5s; box-shadow: 0 0 10px var(--primary); }
         .narrative { background: #000; padding: 15px; border-left: 4px solid var(--primary); margin-bottom: 20px; font-size: 1.1rem; line-height: 1.5; min-height: 100px; }
-        .options-grid { display: grid; gap: 10px; }
+        .options-grid { display: grid; gap: 12px; }
         .opt-btn { background: #222; color: #fff; border: 1px solid #444; padding: 15px; border-radius: 5px; cursor: pointer; text-align: left; font-size: 1rem; transition: 0.2s; }
         .opt-btn:hover { border-color: var(--primary); background: #111; color: var(--primary); }
-        #feedback { margin-top: 15px; padding: 15px; border-radius: 5px; display: none; text-align: center; font-weight: bold; font-size: 1.1rem; }
-        .next-btn { width: 100%; background: var(--primary); color: #000; border: none; padding: 18px; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 20px; display: none; font-size: 1rem; }
+        #feedback { margin-top: 15px; padding: 15px; border-radius: 5px; display: none; text-align: center; font-weight: bold; font-size: 1.1rem; border: 1px solid; }
+        .next-btn { width: 100%; background: var(--primary); color: #000; border: none; padding: 18px; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 20px; display: none; font-size: 1.1rem; text-transform: uppercase; }
+        .hidden { display: none !important; }
     </style>
 </head>
 <body>
@@ -27,139 +28,93 @@
         <div class="narrative">
             "Atenção equipe! O banco central notificou uma queda de pressão no solo. A pista nos trouxe a esta loja de carpetes vazia. O ar cheira a terra fresca e óleo de máquina. Precisamos achar o acesso ao túnel antes que eles fujam com o dinheiro."
         </div>
-        <button class="next-btn" style="display: block;" onclick="start()">INICIAR INVESTIGAÇÃO</button>
+        <button class="next-btn" style="display: block;" onclick="startGame()">INICIAR INVESTIGAÇÃO</button>
     </div>
 
-    <div id="game" class="hidden">
+    <div id="game-screen" class="hidden">
         <div style="display:flex; justify-content:space-between; color:var(--primary); font-size:0.8rem; margin-bottom:5px;">
             <span id="step-txt">PISTA 1/10</span>
             <span>CASO: ASSALTO AO COFRE</span>
         </div>
         <div class="progress-bg"><div id="progress-fill"></div></div>
         <div id="narrative-display" class="narrative"></div>
-        <div id="options" class="options-grid"></div>
+        <div id="options-container" class="options-grid"></div>
         <div id="feedback"></div>
-        <button id="btn-next" class="next-btn" onclick="next()">PRÓXIMA PISTA ➔</button>
+        <button id="btn-next" class="next-btn" onclick="nextQuestion()">PRÓXIMA PISTA ➔</button>
     </div>
 </div>
 
 <script>
     const db = [
-        { 
-            n: "Vocês entram na loja. Há carpetes empilhados até o teto. O Delegado Sabiá nota que um dos tapetes está levemente sujo de barro.", 
-            q: "Onde vocês focam a busca?", 
-            opts: ["Atrás do balcão principal", "Debbaixo do tapete sujo de barro", "No escritório do gerente"], 
-            correct: 1, 
-            rat: "CLICK! Vocês empurram o tapete e encontram um alçapão de metal reforçado." 
-        },
-        { 
-            n: "O alçapão está trancado com um teclado numérico. Há um papel amassado no chão com o desenho de um '8' e um '3'.", 
-            q: "Qual combinação tentar?", 
-            opts: ["8383", "3838", "Tentar forçar com o pé"], 
-            correct: 0, 
-            rat: "BIP! A trava abre. O desenho era um lembrete da senha repetida." 
-        },
-        { 
-            n: "Ao abrir, um poço escuro revela uma escada de metal. Lá embaixo, vocês ouvem um som de motor elétrico.", 
-            q: "Como descer?", 
-            opts: ["Todos de uma vez fazendo barulho", "Um de cada vez com lanternas apagadas", "Um batedor na frente com lanterna tática"], 
-            correct: 2, 
-            rat: "Silenciosos... Vocês chegam à base sem serem notados. O motor é de um ventilador de ar." 
-        },
-        { 
-            n: "No chão do túnel, há várias pegadas. Uma delas é de um sapato social caro, as outras de botas de obra.", 
-            q: "O que isso diz sobre a gangue?", 
-            opts: ["São todos pedreiros", "Há um líder ou 'informante' infiltrado no grupo", "Eles roubaram sapatos também"], 
-            correct: 1, 
-            rat: "Exato! Alguém que não pertence ao 'trabalho bruto' está guiando o grupo." 
-        },
-        { 
-            n: "O túnel se divide em dois. O da direita tem marcas de pneus de carrinho de mão. O da esquerda está limpo, mas cheira a perfume forte.", 
-            q: "Qual pista é mais suspeita?", 
-            opts: ["Direita: seguir o rastro do transporte de terra", "Esquerda: seguir o cheiro estranho", "Ficar parado"], 
-            correct: 0, 
-            rat: "Caminho certo! O carrinho de mão é usado para tirar a terra do cofre." 
-        },
-        { 
-            n: "Vocês acham um rádio comunicador derrubado. Uma voz nervosa diz: 'O maçarico travou, traz a chave 19!'", 
-            q: "Como usar essa informação?", 
-            opts: ["Responder gritando", "Anotar que eles estão com problemas técnicos e ganhar tempo", "Sair correndo atrás deles"], 
-            correct: 1, 
-            rat: "Estratégico! Se o maçarico travou, eles estão parados e vulneráveis." 
-        },
-        { 
-            n: "Há um sensor de movimento laser cruzando o túnel. Se tocar, um alarme vai tocar no esconderijo deles.", 
-            q: "O que o grupo faz?", 
-            opts: ["Pular o laser", "Jogar fumaça/pó para ver o feixe e passar por baixo", "Cortar o fio do laser"], 
-            correct: 1, 
-            rat: "Boa! Com um pouco de poeira de gesso, vocês viram o feixe e passaram ilesos." 
-        },
-        { 
-            n: "Vocês encontram uma planta do banco. O setor 'A-12' está circulado em vermelho com a palavra 'FRÁGIL'.", 
-            q: "O que significa 'A-12'?", 
-            opts: ["O nome de um bandido", "O ponto exato onde a parede do cofre é mais fina", "O horário do assalto"], 
-            correct: 1, 
-            rat: "Isso! Eles estudaram a estrutura para cavar menos e agir rápido." 
-        },
-        { 
-            n: "Um barulho de água jorrando! O túnel começou a inundar por causa de um cano quebrado pelos bandidos.", 
-            q: "Qual a decisão da equipe?", 
-            opts: ["Tentar tapar o vazamento com as mãos", "Usar as tábuas de escoramento para desviar a água", "Ignorar e se molhar"], 
-            correct: 1, 
-            rat: "Improviso de mestre! A água desviada permitiu que vocês continuassem secos." 
-        },
-        { 
-            n: "FIM DO PRIMEIRO SETOR: Vocês chegam a uma porta de madeira pesada dentro do túnel. Atrás dela, ouve-se o som de metal sendo cortado.", 
-            q: "Como entrar?", 
-            opts: ["Arrombar a porta juntos no 3", "Espiar pelo buraco da fechadura", "Bater e pedir para entrar"], 
-            correct: 0, 
-            rat: "BOOM! Vocês invadem a ante-sala! A primeira parte do mistério foi vencida." 
-        }
+        { n: "Vocês entram na loja. Há carpetes empilhados. O Delegado Sabiá nota que um dos tapetes está levemente sujo de barro.", q: "Onde vocês focam a busca?", opts: ["Atrás do balcão principal", "Debaixo do tapete sujo de barro", "No escritório do gerente"], correct: 1, rat: "CLICK! Vocês acharam um alçapão oculto!" },
+        { n: "O alçapão tem um teclado numérico. Um papel no chão tem o desenho '8' e '3'.", q: "Qual a senha?", opts: ["8383", "3838", "1234"], correct: 0, rat: "BIP! A trava abriu!" },
+        { n: "Abaixo há um túnel escuro com som de motor elétrico.", q: "Como descer?", opts: ["Fazendo barulho", "Luzes apagadas", "Um batedor com lanterna tática"], correct: 2, rat: "Entrada segura realizada!" },
+        { n: "Pegadas no chão: botas de obra e um sapato social caro.", q: "O que isso indica?", opts: ["Nada demais", "Há um líder infiltrado ou 'tubarão' no grupo", "Eles amam moda"], correct: 1, rat: "Alguém de dentro do banco pode estar envolvido!" },
+        { n: "Bifurcação no túnel: rastros de carrinho de mão vs cheiro de perfume.", q: "Para onde ir?", opts: ["Seguir o rastro da terra (carrinho)", "Seguir o perfume", "Voltar"], correct: 0, rat: "Caminho certo! O transporte de terra leva ao cofre." },
+        { n: "Rádio comunicador caído chiando: 'Maçarico travou, traz a chave 19!'.", q: "Decisão?", opts: ["Gritar no rádio", "Anotar que estão com problemas e avançar", "Recuar"], correct: 1, rat: "Eles estão vulneráveis agora!" },
+        { n: "Sensor laser cruzando o túnel à frente.", q: "Como passar?", opts: ["Pular no escuro", "Usar poeira para ver o feixe e passar por baixo", "Cortar o fio"], correct: 1, rat: "Passagem limpa! Alarme evitado." },
+        { n: "Planta do banco achada. Setor 'A-12' marcado como 'FRÁGIL'.", q: "Significado?", opts: ["Nome de um bandido", "Ponto onde a parede é mais fina", "Senha do cofre"], correct: 1, rat: "Eles planejaram o ponto de invasão perfeito!" },
+        { n: "O túnel começa a inundar por um cano quebrado.", q: "Conduta?", opts: ["Tapar com as mãos", "Usar tábuas para desviar o fluxo", "Sair do túnel"], correct: 1, rat: "Engenharia de campo! Caminho liberado." },
+        { n: "Vocês chegam a uma porta de madeira pesada. Som de metal sendo cortado atrás dela.", q: "Como entrar?", opts: ["Arrombar juntos", "Bater na porta", "Esperar eles saírem"], correct: 0, rat: "BOOM! Invasão da ante-sala concluída!" }
     ];
 
     let current = 0;
-    function start() { 
-        document.getElementById('intro').classList.add('hidden'); 
-        document.getElementById('game').classList.remove('hidden'); 
-        render(); 
+
+    function startGame() {
+        document.getElementById('intro').classList.add('hidden');
+        document.getElementById('game-screen').classList.remove('hidden');
+        render();
     }
+
     function render() {
         const data = db[current];
-        document.getElementById('step-txt').innerText = `PISTA ${current + 1}/${db.length}`;
+        document.getElementById('step-txt').innerText = "PISTA " + (current + 1) + "/10";
         document.getElementById('progress-fill').style.width = ((current + 1) / db.length * 100) + "%";
         document.getElementById('narrative-display').innerText = data.n + "\n\n" + data.q;
-        const container = document.getElementById('options'); container.innerHTML = '';
+        
+        const container = document.getElementById('options-container');
+        container.innerHTML = '';
         data.opts.forEach((txt, i) => {
-            const b = document.createElement('button'); b.className = 'opt-btn'; b.innerText = txt; b.onclick = () => check(i);
+            const b = document.createElement('button');
+            b.className = 'opt-btn';
+            b.innerText = txt;
+            b.onclick = () => check(i);
             container.appendChild(b);
         });
-        document.getElementById('feedback').style.display = 'none'; document.getElementById('btn-next').style.display = 'none';
+
+        document.getElementById('feedback').style.display = 'none';
+        document.getElementById('btn-next').style.display = 'none';
     }
+
     function check(i) {
-        const data = db[current]; const f = document.getElementById('feedback'); f.style.display = 'block';
+        const data = db[current];
+        const f = document.getElementById('feedback');
+        f.style.display = 'block';
         if(i === data.correct) {
-            f.style.color = var(--primary); f.innerHTML = "🎯 PISTA CONFIRMADA: " + data.rat;
-            document.getElementById('btn-next').style.display = 'bold';
+            f.style.color = "#00ff41";
+            f.style.borderColor = "#00ff41";
+            f.innerHTML = "🎯 PISTA CONFIRMADA: " + data.rat;
             document.getElementById('btn-next').style.display = 'block';
         } else {
-            f.style.color = "#ff4b4b"; f.innerHTML = "❌ PISTA FALSA! O grupo se confundiu. Analisem os detalhes novamente.";
+            f.style.color = "#ff4b4b";
+            f.style.borderColor = "#ff4b4b";
+            f.innerHTML = "❌ PISTA FALSA! Tentem analisar os vestígios novamente.";
         }
     }
-    function next() {
+
+    function nextQuestion() {
         current++;
-        if(current < db.length) render();
-        else {
+        if(current < db.length) {
+            render();
+        } else {
             document.getElementById('app-container').innerHTML = `
                 <div class="header"><h1>SETOR 1 CONCLUÍDO!</h1></div>
-                <p style="text-align:center">Vocês encontraram a ante-sala do crime.</p>
-                <p style="color:var(--primary); text-align:center"><strong>Peça as próximas 10 pistas para o seu assistente agora!</strong></p>
-                <button class="opt-btn" style="width:100%; text-align:center" onclick="location.reload()">REPLAY</button>
+                <p style="text-align:center">Vocês invadiram a ante-sala. O caso está esquentando!</p>
+                <p style="color:#00ff41; text-align:center"><strong>Me peça os próximos 10 passos (11 ao 20) agora!</strong></p>
+                <button class="opt-btn" style="width:100%; text-align:center" onclick="location.reload()">REINICIAR</button>
             `;
         }
     }
 </script>
-<style>
-    .hidden { display: none !important; }
-</style>
 </body>
 </html>
