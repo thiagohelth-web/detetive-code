@@ -3,22 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DETETIVE CODE - A OPERAÇÃO DO SÉCULO</title>
+    <title>DETETIVE CODE: MISTÉRIO DO TÚNEL</title>
     <style>
-        :root { --primary: #00ff41; --bg: #0a0a0a; --card: #151515; --text: #e0e0e0; --error: #ff3e3e; }
-        body { background-color: var(--bg); color: var(--text); font-family: 'Courier New', Courier, monospace; margin: 0; display: flex; justify-content: center; padding: 10px; }
-        #app-container { width: 100%; max-width: 600px; background: var(--card); border: 2px solid #333; border-radius: 10px; padding: 20px; box-shadow: 0 0 30px rgba(0,255,65,0.2); }
-        .header { text-align: center; border-bottom: 2px solid var(--primary); margin-bottom: 15px; padding-bottom: 10px; color: var(--primary); }
-        .progress-bg { width: 100%; height: 10px; background: #222; border-radius: 5px; margin-bottom: 20px; border: 1px solid #444; }
-        #progress-fill { height: 100%; background: var(--primary); width: 0%; transition: 0.5s; }
-        .narrative-box { background: rgba(0,0,0,0.6); padding: 15px; border-left: 5px solid var(--primary); margin-bottom: 15px; font-size: 1rem; line-height: 1.4; color: #fff; }
+        :root { --primary: #00ff41; --bg: #0d0d0d; --card: #1a1a1a; --text: #f0f0f0; }
+        body { background-color: var(--bg); color: var(--text); font-family: 'Courier New', Courier, monospace; margin: 0; display: flex; justify-content: center; padding: 20px; }
+        #app-container { width: 100%; max-width: 600px; background: var(--card); border: 2px solid var(--primary); border-radius: 10px; padding: 25px; box-shadow: 0 0 20px rgba(0,255,65,0.2); }
+        .header { text-align: center; border-bottom: 1px solid var(--primary); margin-bottom: 20px; padding-bottom: 10px; color: var(--primary); }
+        .progress-bg { width: 100%; height: 12px; background: #333; border-radius: 6px; margin-bottom: 20px; overflow: hidden; }
+        #progress-fill { height: 100%; background: var(--primary); width: 0%; transition: 0.5s; box-shadow: 0 0 10px var(--primary); }
+        .narrative { background: #000; padding: 15px; border-left: 4px solid var(--primary); margin-bottom: 20px; font-size: 1.1rem; line-height: 1.5; min-height: 100px; }
         .options-grid { display: grid; gap: 10px; }
-        .opt-btn { background: #1a1a1a; color: #fff; border: 1px solid var(--primary); padding: 15px; border-radius: 5px; cursor: pointer; text-align: left; font-size: 0.95rem; }
-        .opt-btn:hover { background: var(--primary); color: #000; font-weight: bold; }
-        #feedback { margin-top: 15px; padding: 15px; border-radius: 5px; display: none; text-align: center; font-weight: bold; }
-        .next-btn { width: 100%; background: #fff; color: #000; border: none; padding: 18px; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 15px; display: none; }
-        .start-btn { width: 100%; background: var(--primary); color: #000; padding: 20px; border-radius: 5px; font-weight: bold; cursor: pointer; border: none; font-size: 1.2rem; }
-        .hidden { display: none !important; }
+        .opt-btn { background: #222; color: #fff; border: 1px solid #444; padding: 15px; border-radius: 5px; cursor: pointer; text-align: left; font-size: 1rem; transition: 0.2s; }
+        .opt-btn:hover { border-color: var(--primary); background: #111; color: var(--primary); }
+        #feedback { margin-top: 15px; padding: 15px; border-radius: 5px; display: none; text-align: center; font-weight: bold; font-size: 1.1rem; }
+        .next-btn { width: 100%; background: var(--primary); color: #000; border: none; padding: 18px; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 20px; display: none; font-size: 1rem; }
     </style>
 </head>
 <body>
@@ -26,61 +24,142 @@
 <div id="app-container">
     <div id="intro">
         <div class="header"><h1>DETETIVE CODE</h1></div>
-        <div class="narrative-box">
-            "Detetives, aqui é o Delegado Sabiá. O maior assalto a banco da história está acontecendo sob nossos pés. O túnel foi localizado. Temos 100 passos até o confronto final. Vocês estão prontos para caçar esses bandidos?"
+        <div class="narrative">
+            "Atenção equipe! O banco central notificou uma queda de pressão no solo. A pista nos trouxe a esta loja de carpetes vazia. O ar cheira a terra fresca e óleo de máquina. Precisamos achar o acesso ao túnel antes que eles fujam com o dinheiro."
         </div>
-        <button class="start-btn" onclick="start()">INICIAR INVESTIGAÇÃO</button>
+        <button class="next-btn" style="display: block;" onclick="start()">INICIAR INVESTIGAÇÃO</button>
     </div>
 
     <div id="game" class="hidden">
-        <div style="display: flex; justify-content: space-between; color: var(--primary); font-size: 0.8rem; margin-bottom: 5px;">
-            <span id="step-count">PASSO: 1/50</span>
-            <span>STATUS: EM OPERAÇÃO</span>
+        <div style="display:flex; justify-content:space-between; color:var(--primary); font-size:0.8rem; margin-bottom:5px;">
+            <span id="step-txt">PISTA 1/10</span>
+            <span>CASO: ASSALTO AO COFRE</span>
         </div>
         <div class="progress-bg"><div id="progress-fill"></div></div>
-        <div id="narrative" class="narrative-box"></div>
-        <div id="question" style="margin-bottom: 15px; font-weight: bold; color: var(--primary);"></div>
+        <div id="narrative-display" class="narrative"></div>
         <div id="options" class="options-grid"></div>
         <div id="feedback"></div>
-        <button id="next-button" class="next-btn" onclick="next()">AVANÇAR NA HISTÓRIA ➔</button>
+        <button id="btn-next" class="next-btn" onclick="next()">PRÓXIMA PISTA ➔</button>
     </div>
 </div>
 
 <script>
     const db = [
-        { n: "A porta da loja de carpetes está entreaberta. O silêncio é suspeito. Vocês entram devagar.", q: "Onde vocês focam a busca?", options: ["No estoque de carpetes", "No balcão de vendas", "Atrás da cortina do escritório"], correct: 0, rat: "Achamos marcas de terra fresca nos carpetes! Eles passaram por aqui." },
-        { n: "Movendo os carpetes, vocês encontram um buraco no concreto. Um cheiro de óleo diesel sobe pelo vão.", q: "O que fazem antes de descer?", options: ["Jogam uma granada de luz", "Lançam um drone de inspeção", "Descem de uma vez"], correct: 1, rat: "O drone mostra um corredor iluminado por luzes improvisadas. Caminho livre." },
-        { n: "No túnel, vocês acham um bilhete: 'Zeca, o maçarico está no setor 4. Não demore'.", q: "Quem é Zeca?", options: ["Um funcionário do banco", "Um ladrão conhecido como Toupeira", "O dono da loja"], correct: 1, rat: "Zeca Toupeira! O maior escavador do crime organizado. O caso ficou sério." },
-        { n: "Vocês ouvem passos vindo de um corredor lateral do túnel.", q: "Como o grupo reage?", options: ["Gritam 'Parado!'", "Apagam as lanternas e se escondem", "Correm na direção do som"], correct: 1, rat: "Eles passaram do lado de vocês! Um deles deixou cair um molho de chaves." },
-        { n: "O molho de chaves tem a etiqueta 'Cofre 02'.", q: "O que isso indica?", options: ["O alvo principal é o cofre 2", "Eles já saíram do banco", "As chaves são falsas"], correct: 0, rat: "Exato! Eles já têm as chaves secundárias. Precisamos correr." },
-        { n: "Uma bifurcação no túnel. Um lado tem trilhos de carrinho, o outro tem cabos de energia.", q: "Qual seguir?", options: ["Trilhos (transporte de dinheiro)", "Cabos (energia do cofre)", "Voltar"], correct: 0, rat: "Os trilhos levam direto ao centro da operação deles." },
-        { n: "Vocês acham uma marreta suja de sangue.", q: "Qual a conduta?", options: ["Limpar para não sujar o túnel", "Embalar para exame de DNA", "Ignorar"], correct: 1, rat: "O sangue pode ser de um refém ou de um bandido ferido." },
-        { n: "Um sensor de movimento está brilhando na parede do túnel.", q: "Como passar?", options: ["Correr muito rápido", "Usar um spray congelante ou cobrir o sensor", "Chutar o sensor"], correct: 1, rat: "Boa! O alarme deles não tocou. Vocês ainda são invisíveis." },
-        { n: "Vocês encontram uma sala de descanso improvisada com restos de pizza.", q: "O que as caixas de pizza revelam?", options: ["A pizzaria onde eles pediram", "A fome deles", "Nada"], correct: 0, rat: "A Pizzaria do 'Bairro X'! O Delegado Sabiá enviou uma viatura para checar quem pediu." },
-        { n: "Um rádio comunicador no chão começa a falar: 'Sabiá na área, abortar plano B!'.", q: "Eles sabem que vocês estão aqui?", options: ["Sim, eles têm um informante", "Não, é apenas um teste", "O rádio está quebrado"], correct: 0, rat: "Temos um traidor na polícia! O grupo deve ter cuidado redobrado." },
-        // ... (Continuando a história até 50)
-        { n: "O túnel começa a ficar inundado por água do esgoto.", q: "Como prosseguir?", options: ["Usar botas de PVC e continuar", "Nadar", "Voltar"], correct: 0, rat: "A água está gelada, mas o rastro deles está fresco." },
-        { n: "Vocês acham um maçarico industrial abandonado.", q: "Por que deixariam isso?", options: ["Ficou sem gás", "Eles terminaram o furo", "Peso excessivo"], correct: 1, rat: "Se terminaram o furo, eles já estão dentro do cofre!" },
-        { n: "Uma porta de ferro bloqueia o túnel final.", q: "Como abrir?", options: ["Explodir", "Usar as chaves que encontraram", "Bater na porta"], correct: 1, rat: "As chaves do cofre 02 abriram a porta de serviço! Vocês entraram." },
-        { n: "Vocês estão no subsolo do banco. Há câmeras por todo lado.", q: "O que fazer?", options: ["Quebrar as câmeras", "Usar o Jumper de sinal (bloqueador)", "Caminhar normalmente"], correct: 1, rat: "O Jumper anulou o sinal. Vocês são fantasmas no sistema de segurança." },
-        { n: "Um segurança do banco está amarrado em uma cadeira.", q: "Qual a prioridade?", options: ["Libertar e interrogar", "Deixar ele lá e seguir", "Tirar foto"], correct: 0, rat: "Ele diz: 'Eles subiram para a tesouraria com 4 reféns!'" },
-        { n: "O elevador de carga está descendo.", q: "Como se posicionar?", options: ["Ficar na frente da porta", "Ficar nas laterais em emboscada", "Esconder no duto"], correct: 1, rat: "Emboscada perfeita! Dois bandidos saíram e foram rendidos sem disparos." },
-        { n: "O rádio de um bandido rendido toca: 'Cadê o malote, Zeca?'", q: "Como responder?", options: ["Falar com voz grossa: 'Tá subindo'", "Ficar em silêncio", "Xingar"], correct: 0, rat: "Eles acreditaram! O caminho para o andar superior está livre." },
-        { n: "Vocês chegam na sala das câmeras. O monitor mostra o líder no cofre principal.", q: "Qual o próximo passo?", options: ["Desligar a energia do banco", "Ir direto ao cofre", "Ligar o alarme de incêndio"], correct: 0, rat: "Luzes apagadas! No escuro, vocês (com visão noturna) têm a vantagem." },
-        { n: "No escuro, vocês ouvem o líder gritando com os reféns.", q: "O que o grupo faz?", options: ["Atira em tudo", "Usa granada de efeito moral (flashbang)", "Negocia"], correct: 1, rat: "BUM! Eles estão atordoados. Agora é a chance de entrar!" },
-        { n: "Fim do Setor 1: Vocês cercaram a entrada do cofre principal.", q: "O que fazer antes do passo 51?", options: ["Conferir munição e algemas", "Dormir", "Comemorar"], correct: 0, rat: "Preparação total. O cerco final começa agora!" },
-        // Adicionando mais blocos para chegar em 50 rapidamente...
-        { n: "A poeira da granada abaixou. Dois bandidos estão no chão, mas Zeca sumiu.", q: "Para onde ele foi?", options: ["Para um duto de ventilação", "Para trás dos malotes", "Fugiu pelo túnel"], correct: 0, rat: "Marcas de mãos no duto! Ele está tentando fugir pelo teto." },
-        { n: "Vocês estão no duto. É apertado e quente.", q: "Como avançar?", options: ["Um por um em silêncio", "Todos juntos fazendo barulho", "Gritar para ele se render"], correct: 0, rat: "Vocês ouvem o metal rangendo à frente. Ele está logo ali." },
-        { n: "Zeca deixou cair uma mochila cheia de diamantes.", q: "Pegar agora?", options: ["Ignorar e focar no bandido", "Parar para contar", "Guardar um pouco"], correct: 0, rat: "Foco na missão! O dinheiro não vale nada se ele escapar." },
-        { n: "O duto termina em cima da cozinha de um restaurante ao lado do banco.", q: "Como descer?", options: ["Pular de uma vez", "Olhar primeiro o ambiente", "Chamar reforços"], correct: 1, rat: "Zeca está mantendo o cozinheiro como escudo humano!" },
-        { n: "Zeca aponta uma arma para o refém.", q: "Qual a estratégia do grupo?", options: ["Atirador de elite na janela", "Conversar para distrair", "Avançar"], correct: 1, rat: "Vocês distraem ele enquanto o outro detetive se aproxima por trás." },
-        { n: "Zeca se descuida por um segundo.", q: "O que fazem?", options: ["Taser (choque)", "Atirar na perna", "Gritar"], correct: 0, rat: "ZAP! Zeca caiu. O primeiro líder foi capturado." },
-        { n: "No celular do Zeca, chega uma mensagem: 'O navio sai às 22h'.", q: "Existe um plano de fuga maior?", options: ["Sim, eles vão fugir pelo porto", "Não, é trote", "O navio é um código"], correct: 0, rat: "O Porto de Santos! A investigação agora muda de cenário." },
-        { n: "Vocês correm para o estacionamento. Há três carros suspeitos.", q: "Qual escolher para seguir a pista?", options: ["A van preta ligada", "O esportivo vermelho", "O carro de luxo blindado"], correct: 0, rat: "A van preta tem o logo da loja de carpetes! É ela." },
-        { n: "Inicia uma perseguição em alta velocidade.", q: "Como parar a van?", options: ["Atirar nos pneus", "Bater na traseira (Manobra PIT)", "Esperar o combustível acabar"], correct: 1, rat: "A van rodou e parou no acostamento! Dois suspeitos saíram correndo para a mata." },
-        { n: "Na mata, está escuro e chove muito.", q: "Como rastrear?", options: ["Seguir as pegadas na lama", "Usar cão farejador", "Esperar o sol nascer"], correct: 0, rat: "As pegadas levam a uma cabana abandonada." },
-        { n: "A cabana está protegida por um cão de guarda raivoso.", q: "Como passar?", options: ["Dar comida/carinho", "Usar um dardo tranquilizante", "Atirar no cão"], correct: 1, rat: "O cão dormiu. Vocês estão na porta da cabana." },
-        { n: "Dentro da cabana, há mapas de outros 3 bancos.", q: "O que isso revela?", options: ["É uma quadrilha em série", "Eles são geógrafos", "Nada"], correct: 0, rat: "O Delegado Sabiá arregala os olhos: 'É a maior quadrilha do país!'" },
-        { n: "Um notebook está aberto com a conta bancária do traidor da polícia.", q: "Quem é o nome na conta?", options: ["O capitão da central", "O próprio Delegado Sabiá (armação?)", "Um nome falso"], correct: 0, rat: "O Capitão?! O comando da polícia está corrompido!" },
-        { n: "O Capitão aparece na porta com uma arma. 'Vocês sabem demais'.", q: "Como reagir?", options:
+        { 
+            n: "Vocês entram na loja. Há carpetes empilhados até o teto. O Delegado Sabiá nota que um dos tapetes está levemente sujo de barro.", 
+            q: "Onde vocês focam a busca?", 
+            opts: ["Atrás do balcão principal", "Debbaixo do tapete sujo de barro", "No escritório do gerente"], 
+            correct: 1, 
+            rat: "CLICK! Vocês empurram o tapete e encontram um alçapão de metal reforçado." 
+        },
+        { 
+            n: "O alçapão está trancado com um teclado numérico. Há um papel amassado no chão com o desenho de um '8' e um '3'.", 
+            q: "Qual combinação tentar?", 
+            opts: ["8383", "3838", "Tentar forçar com o pé"], 
+            correct: 0, 
+            rat: "BIP! A trava abre. O desenho era um lembrete da senha repetida." 
+        },
+        { 
+            n: "Ao abrir, um poço escuro revela uma escada de metal. Lá embaixo, vocês ouvem um som de motor elétrico.", 
+            q: "Como descer?", 
+            opts: ["Todos de uma vez fazendo barulho", "Um de cada vez com lanternas apagadas", "Um batedor na frente com lanterna tática"], 
+            correct: 2, 
+            rat: "Silenciosos... Vocês chegam à base sem serem notados. O motor é de um ventilador de ar." 
+        },
+        { 
+            n: "No chão do túnel, há várias pegadas. Uma delas é de um sapato social caro, as outras de botas de obra.", 
+            q: "O que isso diz sobre a gangue?", 
+            opts: ["São todos pedreiros", "Há um líder ou 'informante' infiltrado no grupo", "Eles roubaram sapatos também"], 
+            correct: 1, 
+            rat: "Exato! Alguém que não pertence ao 'trabalho bruto' está guiando o grupo." 
+        },
+        { 
+            n: "O túnel se divide em dois. O da direita tem marcas de pneus de carrinho de mão. O da esquerda está limpo, mas cheira a perfume forte.", 
+            q: "Qual pista é mais suspeita?", 
+            opts: ["Direita: seguir o rastro do transporte de terra", "Esquerda: seguir o cheiro estranho", "Ficar parado"], 
+            correct: 0, 
+            rat: "Caminho certo! O carrinho de mão é usado para tirar a terra do cofre." 
+        },
+        { 
+            n: "Vocês acham um rádio comunicador derrubado. Uma voz nervosa diz: 'O maçarico travou, traz a chave 19!'", 
+            q: "Como usar essa informação?", 
+            opts: ["Responder gritando", "Anotar que eles estão com problemas técnicos e ganhar tempo", "Sair correndo atrás deles"], 
+            correct: 1, 
+            rat: "Estratégico! Se o maçarico travou, eles estão parados e vulneráveis." 
+        },
+        { 
+            n: "Há um sensor de movimento laser cruzando o túnel. Se tocar, um alarme vai tocar no esconderijo deles.", 
+            q: "O que o grupo faz?", 
+            opts: ["Pular o laser", "Jogar fumaça/pó para ver o feixe e passar por baixo", "Cortar o fio do laser"], 
+            correct: 1, 
+            rat: "Boa! Com um pouco de poeira de gesso, vocês viram o feixe e passaram ilesos." 
+        },
+        { 
+            n: "Vocês encontram uma planta do banco. O setor 'A-12' está circulado em vermelho com a palavra 'FRÁGIL'.", 
+            q: "O que significa 'A-12'?", 
+            opts: ["O nome de um bandido", "O ponto exato onde a parede do cofre é mais fina", "O horário do assalto"], 
+            correct: 1, 
+            rat: "Isso! Eles estudaram a estrutura para cavar menos e agir rápido." 
+        },
+        { 
+            n: "Um barulho de água jorrando! O túnel começou a inundar por causa de um cano quebrado pelos bandidos.", 
+            q: "Qual a decisão da equipe?", 
+            opts: ["Tentar tapar o vazamento com as mãos", "Usar as tábuas de escoramento para desviar a água", "Ignorar e se molhar"], 
+            correct: 1, 
+            rat: "Improviso de mestre! A água desviada permitiu que vocês continuassem secos." 
+        },
+        { 
+            n: "FIM DO PRIMEIRO SETOR: Vocês chegam a uma porta de madeira pesada dentro do túnel. Atrás dela, ouve-se o som de metal sendo cortado.", 
+            q: "Como entrar?", 
+            opts: ["Arrombar a porta juntos no 3", "Espiar pelo buraco da fechadura", "Bater e pedir para entrar"], 
+            correct: 0, 
+            rat: "BOOM! Vocês invadem a ante-sala! A primeira parte do mistério foi vencida." 
+        }
+    ];
+
+    let current = 0;
+    function start() { 
+        document.getElementById('intro').classList.add('hidden'); 
+        document.getElementById('game').classList.remove('hidden'); 
+        render(); 
+    }
+    function render() {
+        const data = db[current];
+        document.getElementById('step-txt').innerText = `PISTA ${current + 1}/${db.length}`;
+        document.getElementById('progress-fill').style.width = ((current + 1) / db.length * 100) + "%";
+        document.getElementById('narrative-display').innerText = data.n + "\n\n" + data.q;
+        const container = document.getElementById('options'); container.innerHTML = '';
+        data.opts.forEach((txt, i) => {
+            const b = document.createElement('button'); b.className = 'opt-btn'; b.innerText = txt; b.onclick = () => check(i);
+            container.appendChild(b);
+        });
+        document.getElementById('feedback').style.display = 'none'; document.getElementById('btn-next').style.display = 'none';
+    }
+    function check(i) {
+        const data = db[current]; const f = document.getElementById('feedback'); f.style.display = 'block';
+        if(i === data.correct) {
+            f.style.color = var(--primary); f.innerHTML = "🎯 PISTA CONFIRMADA: " + data.rat;
+            document.getElementById('btn-next').style.display = 'bold';
+            document.getElementById('btn-next').style.display = 'block';
+        } else {
+            f.style.color = "#ff4b4b"; f.innerHTML = "❌ PISTA FALSA! O grupo se confundiu. Analisem os detalhes novamente.";
+        }
+    }
+    function next() {
+        current++;
+        if(current < db.length) render();
+        else {
+            document.getElementById('app-container').innerHTML = `
+                <div class="header"><h1>SETOR 1 CONCLUÍDO!</h1></div>
+                <p style="text-align:center">Vocês encontraram a ante-sala do crime.</p>
+                <p style="color:var(--primary); text-align:center"><strong>Peça as próximas 10 pistas para o seu assistente agora!</strong></p>
+                <button class="opt-btn" style="width:100%; text-align:center" onclick="location.reload()">REPLAY</button>
+            `;
+        }
+    }
+</script>
+<style>
+    .hidden { display: none !important; }
+</style>
+</body>
+</html>
