@@ -46,78 +46,55 @@
 
 <script>
     const db = [
-        // SETOR 2: A ANTE-SALA E O INFORMANTE (11-20)
-        { 
-            n: "A porta cede! Vocês estão em uma sala improvisada com monitores e ferramentas. Na mesa, há um crachá do banco com a foto raspada.", 
-            q: "O que vocês investigam primeiro?", 
-            opts: ["Os monitores de vídeo", "O crachá danificado", "As ferramentas de corte"], 
-            correct: 1, 
-            rat: "Usando luz forense, vocês recuperam o nome: 'Roberto, Gerente de Operações'. Temos um suspeito!" 
-        },
-        { 
-            n: "Um dos monitores está ligado e mostra o corredor interno do banco. O sensor de movimento está apitando em intervalos de 5 segundos.", 
-            q: "O que isso significa?", 
-            opts: ["O sistema está quebrado", "Alguém está atravessando o corredor agora", "É apenas um alarme falso"], 
-            correct: 1, 
-            rat: "Exato! Um dos bandidos ainda está lá dentro. Movam-se com cautela!" 
-        },
-        { 
-            n: "No canto da sala, vocês encontram o par do 'sapato social caro'. Dentro dele, há um recibo de estacionamento do Shopping da cidade.", 
-            q: "Como essa pista ajuda?", 
-            opts: ["Não ajuda em nada", "Dá a placa do carro usado pelo líder", "Serve apenas para ver o horário"], 
-            correct: 1, 
-            rat: "No verso do recibo está anotado: 'Vectra Cinza - KLY-2026'. O carro da fuga!" 
-        },
-        { 
-            n: "Há um colete balístico jogado no chão com o logotipo de uma empresa de segurança privada.", 
-            q: "Qual a dedução do grupo?", 
-            opts: ["Os bandidos compraram no mercado negro", "A gangue tem apoio de seguranças reais", "O colete é de brinquedo"], 
-            correct: 1, 
-            rat: "A investigação se aprofunda: a segurança do banco pode estar comprometida!" 
-        },
-        { 
-            n: "Vocês ouvem passos vindo de cima. É o teto do túnel. Os bandidos criaram uma saída de emergência para o bueiro da rua.", 
-            q: "Qual a estratégia da equipe?", 
-            opts: ["Subir e perseguir", "Ficar na sala e montar uma emboscada", "Gritar para eles pararem"], 
-            correct: 1, 
-            rat: "Posições tomadas! Se eles voltarem para buscar o dinheiro, estarão cercados." 
-        },
-        { 
-            n: "Um celular começa a vibrar dentro de uma caixa de ferramentas. O nome no visor é 'O TOUPEIRA'.", 
-            q: "O que fazer?", 
-            opts: ["Atender e ficar calado", "Deixar tocar e rastrear o sinal", "Desligar o aparelho"], 
-            correct: 1, 
-            rat: "O rastreio indica que o líder está a menos de 500 metros daqui, na superfície!" 
-        },
-        { 
-            n: "Na parede, há um mapa do cofre com um X gigante no duto de ventilação. Eles planejam injetar algo lá.", 
-            q: "O que seria mais provável?", 
-            opts: ["Água para inundar", "Gás sonífero para apagar os guardas", "Fumaça para esconder a fuga"], 
-            correct: 1, 
-            rat: "Isso explica por que os guardas do turno da noite não responderam ao rádio." 
-        },
-        { 
-            n: "Vocês encontram uma maleta trancada com senha. O adesivo nela diz: 'Propriedade do Setor de TI'.", 
-            q: "Como abrir?", 
-            opts: ["Usar a força", "Tentar a data do assalto (hoje)", "Procurar a senha nos monitores ao redor"], 
-            correct: 2, 
-            rat: "A senha estava colada embaixo do teclado: 'Admin123'. Dentro há um notebook com o esquema dos alarmes." 
-        },
-        { 
-            n: "O notebook revela que o alarme principal foi desativado manualmente às 22:00 por um código de supervisor.", 
-            q: "Isso confirma o quê?", 
-            opts: ["Que o sistema falhou sozinho", "Que o 'Roberto' (Gerente) é cúmplice direto", "Que os bandidos são hackers"], 
-            correct: 1, 
-            rat: "Cadeia de evidências completa: Roberto facilitou a entrada!" 
-        },
-        { 
-            n: "FIM DO SETOR 2: Um estrondo vem da parede final. O cofre foi rompido! Poeira e luz branca invadem a sala.", 
-            q: "Ação final deste setor:", 
-            opts: ["Entrar no cofre para o confronto final", "Recuar e chamar reforços", "Esperar a poeira baixar"], 
-            correct: 0, 
-            rat: "Armas em punho! Vocês estão cara a cara com o crime. O confronto final começou!" 
-        }
+        // ATO 1: O TÚNEL (1-10)
+        { n: "Vocês entram na loja. Há carpetes empilhados. O Delegado Sabiá nota que um dos tapetes está levemente sujo de barro.", q: "Onde vocês focam a busca?", opts: ["Atrás do balcão principal", "Debaixo do tapete sujo de barro", "No escritório do gerente"], correct: 1, rat: "CLICK! Vocês acharam um alçapão oculto!" },
+        { n: "O alçapão tem um teclado numérico. Um papel no chão tem o desenho '8' e '3'.", q: "Qual a senha?", opts: ["8383", "3838", "1234"], correct: 0, rat: "BIP! A trava abriu!" },
+        { n: "Abaixo há um túnel escuro com som de motor elétrico.", q: "Como descer?", opts: ["Fazendo barulho", "Luzes apagadas", "Um batedor com lanterna tática"], correct: 2, rat: "Entrada segura realizada!" },
+        { n: "Pegadas no chão: botas de obra e um sapato social caro.", q: "O que isso indica?", opts: ["Nada demais", "Há um líder infiltrado ou 'tubarão' no grupo", "Eles amam moda"], correct: 1, rat: "Alguém de dentro do banco pode estar envolvido!" },
+        { n: "Bifurcação no túnel: rastros de carrinho de mão vs cheiro de perfume.", q: "Para onde ir?", opts: ["Seguir o rastro da terra (carrinho)", "Seguir o perfume", "Voltar"], correct: 0, rat: "Caminho certo! O transporte de terra leva ao cofre." },
+        { n: "Rádio comunicador caído chiando: 'Maçarico travou, traz a chave 19!'.", q: "Decisão?", opts: ["Gritar no rádio", "Anotar que estão com problemas e avançar", "Recuar"], correct: 1, rat: "Eles estão vulneráveis agora!" },
+        { n: "Sensor laser cruzando o túnel à frente.", q: "Como passar?", opts: ["Pular no escuro", "Usar poeira para ver o feixe e passar por baixo", "Cortar o fio"], correct: 1, rat: "Passagem limpa! Alarme evitado." },
+        { n: "Planta do banco achada. Setor 'A-12' marcado como 'FRÁGIL'.", q: "Significado?", opts: ["Nome de um bandido", "Ponto onde a parede é mais fina", "Senha do cofre"], correct: 1, rat: "Eles planejaram o ponto de invasão perfeito!" },
+        { n: "O túnel começa a inundar por um cano quebrado.", q: "Conduta?", opts: ["Tapar com as mãos", "Usar tábuas para desviar o fluxo", "Sair do túnel"], correct: 1, rat: "Engenharia de campo! Caminho liberado." },
+        { n: "Vocês chegam a uma porta de madeira pesada. Som de metal sendo cortado atrás dela.", q: "Como entrar?", opts: ["Arrombar juntos", "Bater na porta", "Esperar eles saírem"], correct: 0, rat: "BOOM! Invasão da ante-sala concluída!" },
+        
+        // ATO 2: A ANTE-SALA (11-20)
+        { n: "A porta cede! Vocês estão na Ante-sala. Na mesa, há um crachá do banco com a foto raspada.", q: "O que investigar?", opts: ["Os monitores", "O crachá danificado", "As ferramentas"], correct: 1, rat: "Luz forense revela: 'Roberto, Gerente'. Temos um suspeito!" },
+        { n: "Um monitor mostra o corredor interno. O sensor de movimento apita a cada 5 segundos.", q: "Significado?", opts: ["Sistema quebrado", "Alguém atravessando agora", "Alarme falso"], correct: 1, rat: "O bandido ainda está lá dentro. Cautela!" },
+        { n: "Acham o par do 'sapato social caro'. Dentro, um recibo de Shopping.", q: "O que o recibo revela?", opts: ["Nada", "Placa do carro de fuga: KLY-2026", "Apenas o horário"], correct: 1, rat: "Vectra Cinza anotado no verso. Agora sabemos o carro!" },
+        { n: "Colete balístico de empresa privada no chão.", q: "Dedução?", opts: ["Comprado no mercado negro", "Apoio de seguranças reais", "É de brinquedo"], correct: 1, rat: "A segurança do banco está comprometida!" },
+        { n: "Passos no teto do túnel. É uma saída para o bueiro.", q: "Estratégia?", opts: ["Subir e perseguir", "Montar emboscada na sala", "Gritar"], correct: 1, rat: "Se eles voltarem pelo dinheiro, estão cercados!" },
+        { n: "Celular vibra na caixa de ferramentas: 'O TOUPEIRA' chamando.", q: "Ação?", opts: ["Atender", "Deixar tocar e rastrear sinal", "Desligar"], correct: 1, rat: "Líder rastreado! Está na superfície a 500 metros." },
+        { n: "Mapa do cofre com 'X' no duto de ventilação.", q: "O que planejam?", opts: ["Inundar", "Injetar gás sonífero", "Fumaça"], correct: 1, rat: "Isso explica por que os guardas não respondem." },
+        { n: "Maleta de TI trancada. Adesivo: 'Admin123' embaixo do teclado próximo.", q: "O que tem dentro?", opts: ["Dinheiro", "Notebook com esquema de alarmes", "Lanche"], correct: 1, rat: "Acesso total aos sistemas de segurança!" },
+        { n: "Notebook diz: alarme desativado às 22h por supervisor.", q: "Confirma o quê?", opts: ["Falha técnica", "Roberto (Gerente) é cúmplice", "Bandidos hackers"], correct: 1, rat: "Provas contra o gerente acumuladas!" },
+        { n: "ESTRONDO! O cofre foi rompido. Poeira invade a sala.", q: "Ação final:", opts: ["Entrar no cofre (Confronto)", "Recuar", "Esperar"], correct: 0, rat: "Mãos ao alto! O caso será fechado!" },
+
+        // ATO 3: O COFRE E A PERSEGUIÇÃO (21-30)
+        { n: "Dentro do cofre, montanhas de dinheiro foram mexidas. Há um maço de notas no chão com um pó azul.", q: "O que é esse pó?", opts: ["Açúcar", "Pó reagente de segurança (Dye Pack)", "Tinta de caneta"], correct: 1, rat: "O alarme silencioso explodiu tinta neles! Eles estão marcados com azul!" },
+        { n: "As câmeras de segurança foram pintadas com spray preto, exceto uma no canto superior.", q: "Como usar essa câmera?", opts: ["Tentar acessar via tablet de TI", "Quebrar a câmera", "Ignorar"], correct: 0, rat: "Sucesso! O vídeo mostra 3 homens saindo pelo duto de ventilação." },
+        { n: "O duto de ventilação está aberto. Há marcas de mãos azuis na borda metálica.", q: "Para onde eles foram?", opts: ["Para o porão", "Para o telhado do banco", "Para o estacionamento"], correct: 1, rat: "Eles subiram! A fuga será por cima." },
+        { n: "No telhado, vocês encontram uma corda de rapel presa. Lá embaixo, o Vectra Cinza está esperando.", q: "Como impedir a fuga?", opts: ["Cortar a corda", "Descer no rapel atrás deles", "Atirar no pneu do carro lá de cima"], correct: 2, rat: "Pneu furado! O carro não vai longe, mas eles fugiram a pé!" },
+        { n: "Um dos bandidos deixou cair um walkie-talkie sintonizado na frequência 95.5.", q: "O que vocês ouvem?", opts: ["Música", "O Toupeira dizendo: 'Encontro no galpão do porto'", "Silêncio"], correct: 1, rat: "Temos o local do esconderijo final: O Porto!" },
+        { n: "No chão do telhado, há uma cápsula de munição deflagrada calibre .380.", q: "O que isso indica?", opts: ["Eles estão desarmados", "Houve um desentendimento e alguém atirou", "Eles amam caçar"], correct: 1, rat: "Manchas de sangue indicam que um dos bandidos foi ferido por um comparsa." },
+        { n: "Vocês chegam ao estacionamento. O Vectra está abandonado com a porta aberta.", q: "O que procurar no carro?", opts: ["O rádio do carro", "O GPS ou recibos no porta-luvas", "O pneu reserva"], correct: 1, rat: "Um endereço no GPS: 'Rua dos Pescadores, 10'. É o galpão!" },
+        { n: "Dentro do Vectra, há uma jaqueta suja de barro e um molho de chaves com um chaveiro de 'Pizzaria do Zé'.", q: "Qual a importância disso?", opts: ["Nenhuma", "Pode ser um local de encontro frequente", "Eles estão com fome"], correct: 1, rat: "A Pizzaria do Zé fica exatamente ao lado do galpão no porto!" },
+        { n: "O porta-malas do carro tem vestígios de explosivo C4 e fios cortados.", q: "Qual o perigo agora?", opts: ["Nenhum", "Eles podem ter armado uma bomba no galpão", "Eles vão usar fogos de artifício"], correct: 1, rat: "Cuidado redobrado ao invadir o esconderijo!" },
+        { n: "O Delegado Sabiá recebe um chamado: 'O Gerente Roberto foi visto entrando num barco no cais 4'.", q: "Para onde a equipe se divide?", opts: ["Todos para o galpão", "Metade para o galpão, metade para o cais", "Todos para o banco"], correct: 1, rat: "Divisão tática! Precisamos pegar o líder e o informante ao mesmo tempo." },
+
+        // ATO 4: O CERCO FINAL (31-40)
+        { n: "Cais 4. O barco 'Liberdade' está ligando os motores. Roberto está na popa com uma maleta.", q: "Como parar o barco?", opts: ["Nadar atrás dele", "Usar a lancha da polícia que está ao lado", "Gritar 'Pare!'"], correct: 1, rat: "Perseguição marítima iniciada! Alcancem aquele barco!" },
+        { n: "A lancha encosta no barco. Roberto tenta jogar a maleta no mar.", q: "O que fazer?", opts: ["Pular no Roberto", "Recuperar a maleta antes que afunde", "Atirar para o alto"], correct: 1, rat: "Maleta recuperada! Ela contém 2 milhões de reais e a lista de nomes da gangue." },
+        { n: "Roberto se rende e diz: 'Eu fui obrigado! O Toupeira está no galpão com a bomba!'", q: "Qual a prioridade?", opts: ["Prender Roberto", "Correr para desarmar a bomba no galpão", "Contar o dinheiro"], correct: 1, rat: "Roberto fica sob custódia, a equipe corre para o galpão!" },
+        { n: "No galpão, vocês veem o Toupeira através de uma janela. Ele está conectando um timer a um barril de combustível.", q: "Como entrar sem ser visto?", opts: ["Pela porta da frente chutando tudo", "Pela entrada lateral de carga", "Pelo telhado"], correct: 1, rat: "Entrada silenciosa concluída. Vocês estão atrás dele!" },
+        { n: "O Toupeira está de costas. Ele segura o detonador na mão direita.", q: "Qual o movimento?", opts: ["Gritar 'Mãos ao alto'", "Imobilizar o braço do detonador primeiro", "Atirar no barril"], correct: 1, rat: "Imobilização perfeita! Detonador travado." },
+        { n: "A bomba tem 3 fios: Vermelho, Azul e Verde. O diagrama no notebook de TI dizia: 'Luzes da cidade são azuis'.", q: "Qual fio cortar?", opts: ["Vermelho", "Azul", "Verde"], correct: 1, rat: "O timer parou em 00:03! Vocês salvaram o porto!" },
+        { n: "O Toupeira ri e diz: 'Vocês pegaram o dinheiro do Roberto, mas o resto está no caminhão de lixo!'", q: "O que investigar na rua?", opts: ["O caminhão de lixo que está passando agora", "Os carros de luxo", "As lixeiras fixas"], correct: 0, rat: "Interceptem aquele caminhão! O lixo é o disfarce perfeito." },
+        { n: "O caminhão de lixo é parado. O motorista tenta fugir. No compactador, há sacos cheios de dinheiro.", q: "Como confirmar se é o dinheiro do banco?", opts: ["Contar na hora", "Verificar os lacres do Banco Central nos sacos", "Cheirar as notas"], correct: 1, rat: "Lacres confirmados! Todo o tesouro foi recuperado." },
+        { n: "A perícia chega. Um dos sacos de dinheiro tem um rastreador GPS escondido que não foi ativado.", q: "Quem colocou isso?", opts: ["Os bandidos", "Um funcionário honesto do banco", "O Delegado Sabiá"], correct: 1, rat: "Um herói anônimo no banco ajudou a garantir o sucesso da missão." },
+        { n: "FIM DO CASO: O Toupeira e Roberto estão presos. O túnel foi fechado e o dinheiro devolvido.", q: "Qual a lição final da investigação?", opts: ["O crime compensa", "A perícia técnica e o trabalho em equipe vencem o crime", "Sorte"], correct: 1, rat: "MISSÃO CUMPRIDA! Vocês são os melhores detetives da cidade!" }
     ];
+
 
     let current = 0;
 
